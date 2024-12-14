@@ -5,25 +5,28 @@ import { Colors } from "@/constants/Colors";
 interface ButtonProps {
   children: ReactNode;
   borderRadius?: number;
+  type?: "button" | "link";
 }
 
 export default function Button({
   children,
   borderRadius = 16,
+  type = "button",
   ...rest
 }: ButtonProps) {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
 
   return (
     <TouchableOpacity
       style={{
         backgroundColor:
-          colorScheme === "dark" ? Colors.dark.tint : Colors.light.tint,
+          type === "button" ? Colors[`${colorScheme}`].tint : undefined,
         borderRadius,
-        height: 36,
-        justifyContent: "center",
-        alignItems: "center",
+        height: type === "button" ? 36 : "auto",
+        justifyContent: type === "button" ? "center" : "flex-end",
+        alignItems: type === "button" ? "center" : "flex-end",
         width: "100%",
+        borderWidth: type === "link" ? 0 : 1,
       }}
       {...rest}
     >

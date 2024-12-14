@@ -13,8 +13,18 @@ export default function HomeScreen() {
         <ThemedView style={styles.content}>
           <ThemedView style={styles.mainContainer}>
             <View style={styles.inputs}>
-              <Input placeholder="Digite seu e-mail" />
-              <Input placeholder="Digite sua senha" />
+              <Input
+                keyboardType="email-address"
+                placeholder="Digite seu e-mail"
+              />
+              <Input
+                keyboardType="visible-password"
+                placeholder="Digite sua senha"
+              />
+              <Button type="link">
+                <ThemedText type="link">Esqueci a senha</ThemedText>
+              </Button>
+
               <Button>
                 <ThemedText
                   darkColor={Colors.light.text}
@@ -34,6 +44,9 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   inputs: {
     gap: 12,
+  },
+  forgotPass: {
+    alignItems: "flex-end",
   },
   mainContainer: {
     flex: 1,

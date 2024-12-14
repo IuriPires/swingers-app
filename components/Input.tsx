@@ -8,12 +8,13 @@ export default function Input({ ...rest }: InputProps) {
   return (
     <TextInput
       style={{
-        borderRadius: 14,
-        height: 32,
+        borderRadius: 16,
+        height: 42,
         width: "100%",
         padding: 12,
         borderColor: Colors[`${colorScheme}`].inputBorder,
         backgroundColor: Colors[`${colorScheme}`].inputBackground,
+        color: Colors[`${colorScheme}`].inputText,
       }}
       placeholderTextColor={Colors[`${colorScheme}`].inputText}
       {...rest}
