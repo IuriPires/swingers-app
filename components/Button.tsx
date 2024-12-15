@@ -1,20 +1,27 @@
 import { type ReactNode } from "react";
 import { TouchableOpacity, useColorScheme } from "react-native";
 import { Colors } from "@/constants/Colors";
+import { TouchableOpacityProps } from "react-native-gesture-handler";
 
-interface ButtonProps {
+interface ButtonProps extends TouchableOpacityProps {
   children: ReactNode;
   borderRadius?: number;
   type?: "button" | "link";
+  icon?: boolean;
 }
 
 export default function Button({
   children,
   borderRadius = 16,
   type = "button",
+  icon,
   ...rest
 }: ButtonProps) {
   const colorScheme = useColorScheme() as "dark" | "light";
+
+  if (icon) {
+    return <TouchableOpacity {...rest}>{children}</TouchableOpacity>;
+  }
 
   return (
     <TouchableOpacity
