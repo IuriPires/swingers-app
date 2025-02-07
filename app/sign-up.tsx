@@ -5,39 +5,45 @@ import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
 import { useUsers } from "@/hooks/useUsers";
-import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-export default function SignIn() {
+export default function SignUp() {
   const router = useRouter();
-  const { login, isLoggingIn, loginError } = useUsers();
-  const { login: setAuth } = useAuth();
+  const {
+    createUser,
+    isLoading: isRegistering,
+    error: registerError,
+  } = useUsers();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [birthDate, setBirthDate] = useState("");
 
-  const handleLogin = useCallback(() => {
-    login(
-      { username, password },
+  const handleRegister = useCallback(() => {
+    createUser(
       {
-        onSuccess: (data) => {
-          // Update auth state
-          setAuth(data);
-          // Redirect to main app screen after successful login
-          router.replace("/app");
+        name,
+        email,
+        username,
+        password,
+        birthDate,
+      },
+      {
+        onSuccess: () => {
+          // Redirect to main app screen after successful registration
+          console.log("Registered successfully");
+          router.replace("/");
         },
       }
     );
-  }, [username, password, login, router, setAuth]);
+  }, [name, email, username, password, birthDate, createUser, router]);
 
   const navigateBack = () => {
     router.back();
   };
-
-  const navigateToForgotPass = useCallback(() => {
-    router.push("/forgot-password");
-  }, [router]);
 
   return (
     <ThemedView style={styles.mainContainer}>
@@ -46,11 +52,24 @@ export default function SignIn() {
       </Button>
 
       <View style={styles.inputs}>
-        <ThemedText type="subtitle">Entrar</ThemedText>
+        <ThemedText type="subtitle">Criar Conta</ThemedText>
+
+        <Input
+          placeholder="Digite seu nome completo"
+          value={name}
+          onChangeText={setName}
+        />
 
         <Input
           keyboardType="email-address"
           placeholder="Digite seu e-mail"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+
+        <Input
+          placeholder="Digite seu nome de usuário"
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
@@ -63,24 +82,27 @@ export default function SignIn() {
           onChangeText={setPassword}
         />
 
-        {loginError && (
+        <Input
+          placeholder="Data de nascimento (YYYY-MM-DD)"
+          value={birthDate}
+          onChangeText={setBirthDate}
+          keyboardType="numbers-and-punctuation"
+        />
+
+        {registerError && (
           <ThemedText style={styles.errorText}>
-            {loginError instanceof Error
-              ? loginError.message
-              : "Erro ao fazer login"}
+            {registerError instanceof Error
+              ? registerError.message
+              : "Erro ao criar conta"}
           </ThemedText>
         )}
 
-        <Button type="link" onPress={navigateToForgotPass}>
-          <ThemedText type="link">Esqueci a senha</ThemedText>
-        </Button>
-
-        <Button onPress={handleLogin} disabled={isLoggingIn}>
+        <Button onPress={handleRegister} disabled={isRegistering}>
           <ThemedText
             darkColor={Colors.light.text}
             lightColor={Colors.dark.text}
           >
-            {isLoggingIn ? "Entrando..." : "Entrar"}
+            {isRegistering ? "Criando conta..." : "Criar conta"}
           </ThemedText>
         </Button>
       </View>

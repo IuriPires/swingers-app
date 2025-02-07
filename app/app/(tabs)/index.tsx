@@ -1,45 +1,38 @@
-import { StyleSheet, View, SafeAreaView } from "react-native";
-
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import Button from "@/components/Button";
-import { Colors } from "@/constants/Colors";
-import Input from "@/components/Input";
+import { StyleSheet } from "react-native";
+import { useMatch } from "@/hooks/useMatch";
+import { useEffect } from "react";
+import { tokenManager } from "@/services/api";
 
-export default function HomeScreen() {
+export default function MatchesScreen() {
+  const { getNextMatch, potentialMatch } = useMatch();
+
+  async function getToken() {
+    const token = await tokenManager.getToken();
+    console.log(token, "TOKEN");
+  }
+
+  useEffect(() => {
+    getNextMatch();
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    console.log(potentialMatch, "MY DATA");
+  }, [potentialMatch]);
+
   return (
-    <ThemedView style={styles.mainContainer}>
-      <ThemedView style={styles.content}>
-        <ThemedView style={styles.mainContainer}></ThemedView>
-      </ThemedView>
+    <ThemedView style={styles.container}>
+      <ThemedText>Matches Screen</ThemedText>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
-  },
-  content: {
-    flex: 1,
-    padding: 32,
-    borderStyle: "dashed",
-    borderWidth: 1,
-  },
-  titleContainer: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+    justifyContent: "center",
   },
 });
