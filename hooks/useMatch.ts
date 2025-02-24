@@ -14,6 +14,9 @@ interface PotentialMatch {
   id: string;
   name: string;
   birthDate: string;
+  username: string;
+  age: number;
+  bio?: string;
   // Add other user profile fields you want to show in the matching interface
   // but exclude sensitive information like email, password, etc.
 }
@@ -47,11 +50,12 @@ export function useMatch() {
   // Like user mutation
   const likeMutation = useMutation({
     mutationFn: (userId: string) => api.post(`/matches/${userId}/like`),
-    onSuccess: () => {
+    onSuccess: (data) => {
       // After liking, we want to get the next potential match
       queryClient.invalidateQueries({
         queryKey: ["nextMatch"],
       });
+      console.log(data, "ONLIKE DATA");
       // Also refresh the matches list as a new match might have been created
       queryClient.invalidateQueries({
         queryKey: ["matches"],

@@ -1,4 +1,5 @@
 import * as SecureStore from "expo-secure-store";
+import { Match, Message } from "@/types";
 
 const TOKEN_KEY = "auth_token";
 
@@ -15,7 +16,7 @@ export async function fetchApi<T>(
   options?: RequestInit
 ): Promise<T> {
   // You can change the baseURL here
-  const baseURL = "http://192.168.1.209:3000";
+  const baseURL = "http://localhost:3000";
   const token = await tokenManager.getToken();
 
   const headers = {
@@ -56,4 +57,13 @@ export const api = {
 
   // DELETE request
   delete: <T>(url: string) => fetchApi<T>(url, { method: "DELETE" }),
+
+  // Matches endpoints
+  matches: {
+    getAll: () => api.get<Match[]>("/matches"),
+    getMessages: (matchId: string) =>
+      api.get<Message[]>(`/messages/${matchId}`),
+    sendMessage: (matchId: string, content: string) =>
+      api.post<Message>(`/messages/${matchId}`, { content }),
+  },
 };
